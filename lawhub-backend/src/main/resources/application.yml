@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: lawhub-backend
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/lawhub
+    username: postgres
+    password: 12341234
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+# JWT ??
+jwt:
+  secret-key: 'lawhub'
+  expiration-time: 86400000 # 24 hours in milliseconds
+
+
+server:
+  port: 8080

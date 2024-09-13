@@ -1,0 +1,26 @@
+version: '3'
+services:
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "8081:8081"
+    networks:
+      - lawhub-network
+
+  case-service:
+    build: ./case-service
+    ports:
+      - "8082:8082"
+    networks:
+      - lawhub-network
+
+  api-gateway:
+    build: ./api-gateway
+    ports:
+      - "8080:8080"
+    networks:
+      - lawhub-network
+
+networks:
+  lawhub-network:
+    driver: bridge
