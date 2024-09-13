@@ -1,35 +1,43 @@
 <script setup>
 import HelloWorld from "./components/HelloWorld.vue";
 import {useAuthStore} from "./stores/authStore.js";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 const authStore = useAuthStore();
 const logout = () => {
-  alert('logout')
   authStore.clearToken();
+  router.go()
 }
 const username = ref('');
 const password = ref('');
 const errorMessage = ref('');
-const isAuthenticated = ref(authStore.isAuthenticated);
+const isAuthenticated = computed(() => authStore.isAuthenticated); // 반응형으로 처리
 const loginUser = async () => {
   const success = await authStore.login(username.value, password.value);
   if (success) {
-    router.push('/suits'); // 로그인 성공 시 사건 목록 페이지로 이동
+    router.go()
+    // router.push('/suits'); // 로그인 성공 시 사건 목록 페이지로 이동
   } else {
     errorMessage.value = 'Invalid username or password';
   }
+};
+const openSwagger = () => {
+  // Swagger UI 경로로 새로운 탭에서 이동
+  window.open('http://localhost:8080/swagger-ui/index.html', '_blank');
 };
 </script>
 
 <template>
   <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
+    <a target="_blank">
+      <!-- Swagger UI로 이동하는 버튼 -->
+      <button @click="openSwagger">Open API Documentation (Swagger UI)</button>
     </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
+    <a target="_blank">
+      <!-- Swagger UI로 이동하는 버튼 -->
+      <button @click="openSwagger">Open API Documentation (Swagger UI)</button>
     </a>
   </div>
+<!--  {{isAuthenticated}}-->
   <template v-if="isAuthenticated">
     <div>
       <p v-if="isAuthenticated">You are logged in!</p>
@@ -54,8 +62,6 @@ const loginUser = async () => {
       </form>
     </div>
   </template>
-
-  <HelloWorld msg="Vite + Vue" />
 </template>
 
 <style scoped>

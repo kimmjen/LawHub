@@ -16,6 +16,15 @@ jwt:
   secret-key: 'WmR2YnBnb3RsZXZoaGJ2cmtxN2FiYmNtYXNkZmdoa2xqYXNkZmY='
   expiration-time: 86400000 # 24 hours in milliseconds
 
+springdoc:
+#  api-docs:
+#    path: /v3/api-docs
+#  swagger-ui:
+#    path: /swagger-ui.html
+  info:
+    title: LawHub API Documentation
+    description: This is the API documentation for the LawHub application.
+    version: 1.0.0
 
 server:
   port: 8080

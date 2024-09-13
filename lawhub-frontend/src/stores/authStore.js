@@ -17,7 +17,7 @@ export const useAuthStore = defineStore("authStore", () =>{
         localStorage.removeItem('token'); // localStorage에서 토큰 제거
     };
 
-    // computed로 인증 여부 확인
+    // 인증 여부 확인
     const isAuthenticated = computed(() => !!token.value);
 
     // 로그인 api 호출

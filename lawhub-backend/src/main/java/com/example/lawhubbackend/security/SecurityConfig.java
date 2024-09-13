@@ -3,7 +3,7 @@ package com.example.lawhubbackend.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,21 +11,38 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+
 @Configuration
 public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors() // CORS 설정 허용
-                .and()
-                .csrf().disable()
+                .cors(Customizer.withDefaults())  // 새로운 CORS 설정
+                .csrf(csrf -> csrf.disable())  // 새로운 CSRF 비활성화 방식
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/**").permitAll()  // 인증 없이 접근 가능한 경로
-                        .anyRequest().authenticated()             // 그 외의 모든 요청은 인증 필요
+                        .requestMatchers("/**").permitAll()  // 인증 없이 접근 가능한 경로
+//                        .requestMatchers("/auth/**").permitAll()  // 인증 없이 접근 가능한 경로
+//                        .requestMatchers("/swagger-ui/**").permitAll()  // 인증 없이 접근 가능한 경로
+//                        .requestMatchers("/v3/api-docs/**").permitAll()  // 인증 없이 접근 가능한 경로
+                        .anyRequest().authenticated()  // 그 외의 요청은 인증 필요
                 );
         return http.build();
     }
+
+    //    @Bean
+//    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http
+//                .cors() // CORS 설정 허용
+//                .and()
+//                .csrf().disable()
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()  // 인증 없이 접근 가능한 경로
+////                        .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()  // 인증 없이 접근 가능한 경로
+//                        .anyRequest().authenticated()             // 그 외의 모든 요청은 인증 필요
+//                );
+//        return http.build();
+//    }
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -37,6 +54,7 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", config); // 모든 경로에 대해 CORS 설정 적용
         return new CorsFilter(source);
     }
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
