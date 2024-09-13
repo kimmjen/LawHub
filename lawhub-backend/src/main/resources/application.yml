@@ -13,7 +13,7 @@ spring:
 
 # JWT ??
 jwt:
-  secret-key: 'lawhub'
+  secret-key: 'WmR2YnBnb3RsZXZoaGJ2cmtxN2FiYmNtYXNkZmdoa2xqYXNkZmY='
   expiration-time: 86400000 # 24 hours in milliseconds
 
 

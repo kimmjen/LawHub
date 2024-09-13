@@ -7,8 +7,18 @@ const logout = () => {
   alert('logout')
   authStore.clearToken();
 }
-const isAuthenticated = ref(authStore.isAuthenticated());
-
+const username = ref('');
+const password = ref('');
+const errorMessage = ref('');
+const isAuthenticated = ref(authStore.isAuthenticated);
+const loginUser = async () => {
+  const success = await authStore.login(username.value, password.value);
+  if (success) {
+    router.push('/suits'); // 로그인 성공 시 사건 목록 페이지로 이동
+  } else {
+    errorMessage.value = 'Invalid username or password';
+  }
+};
 </script>
 
 <template>
@@ -20,11 +30,31 @@ const isAuthenticated = ref(authStore.isAuthenticated());
       <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
     </a>
   </div>
-  <div>
-    <p v-if="isAuthenticated">You are logged in!</p>
-    <p v-else>Please log in.</p>
-    <button @click="logout">Logout</button>
-  </div>
+  <template v-if="isAuthenticated">
+    <div>
+      <p v-if="isAuthenticated">You are logged in!</p>
+      <p v-else>Please log in.</p>
+      <button @click="logout">Logout</button>
+    </div>
+  </template>
+  <template v-else>
+    <div class="login">
+      <h1>Login</h1>
+      <form @submit.prevent="loginUser">
+        <div>
+          <label for="username">Username</label>
+          <input type="text" v-model="username" required />
+        </div>
+        <div>
+          <label for="password">Password</label>
+          <input type="password" v-model="password" required />
+        </div>
+        <button type="submit">Login</button>
+        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+      </form>
+    </div>
+  </template>
+
   <HelloWorld msg="Vite + Vue" />
 </template>
 
