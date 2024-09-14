@@ -27,16 +27,7 @@ const openSwagger = () => {
 </script>
 
 <template>
-  <div>
-    <a target="_blank">
-      <!-- Swagger UI로 이동하는 버튼 -->
-      <button @click="openSwagger">Open API Documentation (Swagger UI)</button>
-    </a>
-    <a target="_blank">
-      <!-- Swagger UI로 이동하는 버튼 -->
-      <button @click="openSwagger">Open API Documentation (Swagger UI)</button>
-    </a>
-  </div>
+
 <!--  {{isAuthenticated}}-->
   <template v-if="isAuthenticated">
     <div>
@@ -62,6 +53,16 @@ const openSwagger = () => {
       </form>
     </div>
   </template>
+  <div>
+    <a target="_blank">
+      <!-- Swagger UI로 이동하는 버튼 -->
+      <button @click="openSwagger">Open API Documentation (Swagger UI)</button>
+    </a>
+    <a target="_blank">
+      <!-- Swagger UI로 이동하는 버튼 -->
+      <button @click="openSwagger">Open API Documentation (Swagger UI)</button>
+    </a>
+  </div>
 </template>
 
 <style scoped>

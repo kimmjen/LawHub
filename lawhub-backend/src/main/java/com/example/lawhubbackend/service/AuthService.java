@@ -33,15 +33,14 @@ public class AuthService {
 
     // 로그인 로직
     public String loginUser(String username, String password) {
-
         // 사용자 조회
         Optional<User> userOptional = userRepository.findByUsername(username);
         if (userOptional.isPresent()) {
             User user = userOptional.get();
             // 패스워드 검증
             if (passwordEncoder.matches(password, user.getPassword())) {
-                // JWT 토큰 발급
-                return jwtTokenProvider.createToken(user.getUsername(), new ArrayList<>(user.getRoles()));
+                // JWT 토큰 발급 (단일 역할을 리스트로 변환하여 전달)
+                return jwtTokenProvider.createToken(user.getUsername(), user.getRole());
             }
         }
         throw new IllegalArgumentException("Invalid username or password");

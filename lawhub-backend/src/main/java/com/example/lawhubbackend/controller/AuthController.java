@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -35,6 +32,12 @@ public class AuthController {
     public ResponseEntity<?> signup(@RequestBody User user) {
         // 사용자 비밀번호를 암호화
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        // 기본 Role 설정 (필요할 경우)
+        if (user.getRole() == null || user.getRole().isEmpty()) {
+            user.setRole("GUEST");  // 기본 역할을 "GUEST"로 설정
+        }
+
         // 사용자 정보를 데이터베이스에 저장
         User savedUser = userRepository.save(user);
 
@@ -43,7 +46,8 @@ public class AuthController {
                 savedUser.getId(),
                 savedUser.getUsername(),
                 savedUser.getEmail(),
-                savedUser.getPhone()
+                savedUser.getPhone(),
+                savedUser.getRole()
         ));
     }
 
@@ -56,8 +60,8 @@ public class AuthController {
 
         User user = userOptional.get();
         if (passwordEncoder.matches(credentials.get("password"), user.getPassword())) {
-            // 권한 목록을 Set에서 List로 변환하여 JWT 토큰을 생성
-            String token = jwtTokenProvider.createToken(user.getUsername(), new ArrayList<>(user.getRoles()));
+            // JWT 토큰을 생성 (단일 Role 값 사용)
+            String token = jwtTokenProvider.createToken(user.getUsername(), user.getRole());  // 단일 역할을 리스트로 감싸서 전달
             return ResponseEntity.ok(Map.of("token", token));
         } else {
             return ResponseEntity.status(401).body("Invalid credentials");

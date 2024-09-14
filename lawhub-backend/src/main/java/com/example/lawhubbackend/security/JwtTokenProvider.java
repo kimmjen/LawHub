@@ -28,13 +28,13 @@ public class JwtTokenProvider {
     }
 
     // JWT 토큰 생성 메서드
-    public String createToken(String username, List<String> roles) {
+    public String createToken(String username, String role) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds); // 외부 설정에서 가져온 유효 시간 사용
 
         return Jwts.builder()
                 .setSubject(username)
-                .claim("roles", roles) // 사용자 권한을 클레임으로 추가
+                .claim("role", role) // 사용자 권한을 클레임으로 추가
                 .setIssuedAt(now)
                 .setExpiration(validity) // 토큰 만료 시간 설정
                 .signWith(getSecretKey(), SignatureAlgorithm.HS256) // SecretKey로 서명
